@@ -59,7 +59,6 @@ const editorConfig = {
 const toolbarConfig = {
     excludeKeys: [
         'headerSelect',
-        'blockquote',
         'group-font',
         'group-image',
         'group-video',
