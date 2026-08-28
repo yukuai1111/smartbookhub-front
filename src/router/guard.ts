@@ -3,8 +3,8 @@ import { useUserStore } from '@/stores/userStore'
 import { ElMessage } from 'element-plus'
 import type { Router } from 'vue-router'
 //白名单
-const publicList=['/logReg','/','/articleSquare','/articleDetail']  //不需要登陆的公开路由
-const backList=['/articleDetail','/comment','/otherUserHome','/about']  //后台放行的路由
+const publicList=['/logReg','/','/articleSquare','/articleDetail','/about']  //不需要登陆的公开路由
+const backList=['/articleDetail','/comment','/otherUserHome']  //后台放行的路由
 export const routerGuard = (router: Router) => {
     router.beforeEach((to, from, next) => {
         const userStore = useUserStore()
