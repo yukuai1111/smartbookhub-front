@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header />
     <div class="comment-page">
         <div class="nav" @click="router.back()">
             <div class="nav-icon">
@@ -26,15 +26,14 @@
                     </div>
                     <!-- 有评论 -->
                     <div v-else>
-                        <div class="comment-item"
+                        <div class="comment-item" v-for="item in commentList" :key="item.commentId"
                             :style="{ backgroundColor: item.commentIsDeleted ? '#e2e8f0' : '#f6fafe' }"
-                            v-for="item in commentList" :key="item.commentId"
                             :class="{ flash: item.commentId === highlightCommentId }" :id="`comment-${item.commentId}`">
                             <!-- 根评论 -->
                             <div class="father">
                                 <div class="avatar">
-                                    <el-image style="width:45px;height: 45px;border-radius: 50%;"
-                                        :src="avatarBaseurl + item.commentAvatar"></el-image>
+                                    <el-image style="width: 50px;height: 50px;height: 50px;border-radius: 50%;"
+                                        fit="cover" :src="avatarBaseurl + item.commentAvatar"></el-image>
                                 </div>
                                 <div class="info">
                                     <div class="name">
@@ -69,11 +68,13 @@
 
                             <!-- 子评论 -->
                             <div v-show="item.isExpandReply" class="child">
-                                <div class="child-item" v-for="child in replyMap.get(item.commentId) || []"
-                                    :key="child.commentId" :id="`comment-${child.commentId}`"
+                                <div class="child-item"
+                                    :style="{ backgroundColor: child.commentIsDeleted ? '#e2e8f0' : '#f6fafe' }"
+                                    v-for="child in replyMap.get(item.commentId) || []" :key="child.commentId"
+                                    :id="`comment-${child.commentId}`"
                                     :class="{ flash: child.commentId === highlightCommentId }">
                                     <div class="child-avatar">
-                                        <el-image style="width:35px;height: 35px;border-radius: 50%;"
+                                        <el-image style="width:35px;height: 35px;border-radius: 50%;" fit="cover"
                                             :src="avatarBaseurl + child.commentAvatar"></el-image>
                                     </div>
                                     <div class="child-info">
@@ -105,9 +106,13 @@
                                         <ArrowDown />
                                     </el-icon>
                                 </el-divider>
-                                <el-divider v-if="remainCountMap.get(item.commentId) === 0" border-style="insert"
-                                    content-position="left" class="nomore">
-                                    ———没有更多回复
+                                <el-divider border-style="insert" content-position="left" class="nomore">
+                                    <span v-if="remainCountMap.get(item.commentId) === 0"> ———没有更多回复 </span>
+                                    <span @click="handleClose(item)" class="close">
+                                        <el-icon>
+                                            <ArrowUp />
+                                        </el-icon>
+                                        收起</span>
                                 </el-divider>
                             </div>
                         </div>
@@ -120,7 +125,7 @@
             </div>
             <div class="comment-send" v-if="!errMsg">
                 <div class="avatar">
-                    <el-image style="width:60px;height: 60px;"
+                    <el-image style="width:60px;height: 60px;" fit="cover"
                         :src="avatarBaseurl + userStore.userinfo!.avatar"></el-image>
                 </div>
                 <div class="send-container">
@@ -155,7 +160,7 @@ import type { Comment } from '@/interface/comment'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/userStore'
-import { CaretLeft, ArrowDown, Close } from '@element-plus/icons-vue'
+import { CaretLeft, ArrowDown, Close, ArrowUp } from '@element-plus/icons-vue'
 import { formatTime } from '@/utils/formatTime'
 import { useScroll } from '@/hooks/useScroll'
 import { useArticleStore } from '@/stores/articleStore'
@@ -222,6 +227,7 @@ const getComment = async () => {
                 item.isExpandReply = false
                 return item
             })]
+            console.log(commentList.value)
             //如果获取的新数据的条数已经小于pageSize，说明没有更多评论了
             if (res.data.commentList.length < commentData.pageSize) {
                 noMore.value = true
@@ -280,7 +286,7 @@ const handleReply = async (item: Comment, isChild: boolean, isRefresh: boolean =
         })
         if (res.data) {
             item.isExpandReply = true
-            item.replyCount++
+            // item.replyCount++
             //获取旧的子评论列表
             let oldReply = replyMap.value.get(rootId) || []
             //追加新数据
@@ -369,11 +375,9 @@ const handleSend = async () => {
         //往评论列表添加一条评论
         if (res.data) {
             const rootId = res.data.rootId
-            // const replyId = res.data.replyId
             //如果是回复
             if (isReply.targetId && comment) {
                 //被回复数自增
-                // comment.replyCount++
                 //获取根评论数据
                 let rootData: Comment | null = null
                 if (comment.root_id) {
@@ -429,6 +433,8 @@ const handleSend = async () => {
                 //     }
                 // }
                 */
+                //根评论的回复数+1
+                rootData.replyCount++
                 // 清除缓存
                 replyMap.value.delete(rootId)
                 remainCountMap.value.delete(rootId)
@@ -460,6 +466,13 @@ const handleSend = async () => {
             ElMessage.error(err as string)
         }
     }
+}
+
+//收起评论
+const handleClose = async (item: Comment) => {
+    item.isExpandReply = false
+    //滚动到指定元素
+    await scrollById(`comment-${item.commentId}`)
 }
 onMounted(async () => {
     commentData.articleCode = route.query.articleCode as string
@@ -583,6 +596,8 @@ onMounted(async () => {
                     justify-content: flex-start;
                     gap: 12px;
                     width: 100%;
+                    border-radius: 20px;
+                    padding: 12px;
 
                     .info {
                         flex: 1;
@@ -605,6 +620,8 @@ onMounted(async () => {
                     border-left: 2px solid #e4e7ed;
 
                     .child-item {
+                        border-radius: 20px;
+                        padding: 12px;
                         margin-bottom: 40px;
                         display: flex;
                         align-items: flex-start;
@@ -627,10 +644,23 @@ onMounted(async () => {
                     }
 
                     .nomore {
+
                         :deep(.el-divider__text) {
                             background-color: transparent;
                             font-size: 13px;
                             color: #686b70;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            gap: 30px;
+
+                            .close {
+                                cursor: pointer;
+
+                                &:hover {
+                                    color: #409eff;
+                                }
+                            }
                         }
                     }
                 }

@@ -18,7 +18,7 @@
                 <div class="list" v-if="recommendList.length > 0">
                     <div class="item" @click="goDetail(item.code)" v-for="item in recommendList" :key="item.id">
                         <div class="cover">
-                            <el-image class="cover-img" :src="coverBaseUrl + item.cover" fit="cover" />
+                            <el-image  class="cover-img" :src="coverBaseUrl + item.cover" fit="fill" />
                         </div>
                         <div class="info">
                             <div class="title">{{ item.title }}</div>
@@ -42,7 +42,7 @@
                 <div class="list" v-if="articleList.length > 0">
                     <div class="item" @click="goDetail(item.code)" v-for="item in articleList" :key="item.id">
                         <div class="cover">
-                            <el-image class="cover-img" :src="coverBaseUrl + item.cover" fit="cover" />
+                            <el-image class="cover-img" :src="coverBaseUrl + item.cover" fit="fill" />
                         </div>
                         <div class="info">
                             <div class="title">{{ item.title }}</div>
@@ -174,8 +174,8 @@ onMounted(async () => {
         &:last-child {
             margin-bottom: 0;
         }
-
         .info {
+            min-width: 0;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -224,7 +224,6 @@ onMounted(async () => {
 
         .list {
             margin-top: 20px;
-
             .item {
                 border-top: 3px solid #5489c7;
 

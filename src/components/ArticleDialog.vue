@@ -22,7 +22,7 @@
                         <div class="editor-wrap">
                             <Toolbar :editor="editorRef!" :defaultConfig="toolbarConfig" />
                             <Editor v-model="article.content" :default-config="editorConfig"
-                                @on-created="handleEditorCreated" />
+                                @on-created="handleEditorCreated"/>
                         </div>
                     </el-form-item>
                 </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, shallowRef, onBeforeUnmount,watch } from 'vue'
+import { reactive, ref, shallowRef, onBeforeUnmount, watch } from 'vue'
 import { useArticleStore } from '@/stores/articleStore'
 import type { Article } from '@/interface/article'
 import { ElMessage } from 'element-plus'
@@ -54,22 +54,32 @@ const actionDisabled = ref<boolean>(false)
 const selectCover = ref<File | null>(null)
 // 富文本编辑器配置
 const editorConfig = {
-    placeholder: '请编写文章正文，支持加粗、列表等文本操作'
+    placeholder: '请编写文章正文，支持加粗、列表等文本操作',
+    MENU_CONF: {
+    uploadImage: {
+      server: import.meta.env.VITE_API_BASEURL+'/article/editor',
+       fieldName: 'editor',
+      headers: () => ({
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }),
+      showLoading: true,
+      maxFileSize: 5 * 1024 * 1024,
+      maxNumberOfFiles: 5,
+      allowedFileTypes: ['image/*'],
+      customInsert(res: any, insertImgFn: (src: string) => void) {
+        const fullSrc = import.meta.env.VITE_IMG_BASEURL+ res.data.url
+        insertImgFn(fullSrc)
+      }
+    }
+  }
 }
 const toolbarConfig = {
     excludeKeys: [
-        'headerSelect',
-        'group-font',
-        'group-image',
         'group-video',
-        'insertLink',
-        'insertTable',
-        'emotion',
-        'fullScreen',
-        'code',
-        'codeBlock'
+        'fullScreen'
     ]
 }
+
 // 初始化富文本编辑器
 const handleEditorCreated = (editor: IDomEditor) => {
     editorRef.value = editor
@@ -191,8 +201,8 @@ const clearImg = () => {
 const selectImg = (file: File) => {
     selectCover.value = file
 }
-watch(()=>articleStore.isEdit,()=>{
-    if(articleStore.isEdit){
+watch(() => articleStore.isEdit, () => {
+    if (articleStore.isEdit) {
         article.title = props.title
         article.summary = props.summary
         article.content = props.content
@@ -247,8 +257,8 @@ onBeforeUnmount(() => {
     }
 
     :deep(.w-e-text-container) {
-        height: 360px !important;
-        overflow-y: auto;
+        height: 360px;
+        overflow:visible !important;
     }
 
     :deep(.w-e-text-placeholder) {

@@ -75,7 +75,7 @@
                             <ChatDotSquare />
                         </el-icon>
                         <span class="action-text">评论{{ article.commentCount === 0 ? '(0)' : `(${article.commentCount})`
-                            }}</span>
+                        }}</span>
                     </el-button>
                 </div>
             </div>
@@ -444,6 +444,45 @@ onMounted(() => {
                     line-height: 1.8;
                     margin: 14px 0;
                 }
+
+                :deep(pre) {
+                    margin: 20px 0;
+                    background: #424c5c;
+                    padding: 12px 16px;
+                    border-radius: 6px;
+                    overflow-x: auto;
+                    color: #e2e8f0;
+                }
+
+                :deep(code) {
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
+
+                :deep(pre > code) {
+                    background: transparent;
+                    padding: 0;
+                }
+
+                :deep(table) {
+                    margin: auto;
+                    border-collapse: collapse;
+                }
+
+                :deep(td, th) {
+                    border: 1px solid #ccc;
+                    padding: 6px 10px;
+                }
+
+                :deep(a) {
+                    color: #409eff;
+                    text-decoration: underline;
+                }
+
+                :deep(a:hover) {
+                    color: #66b1ff;
+                }
+
 
             }
 
