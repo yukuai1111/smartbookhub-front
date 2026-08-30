@@ -148,7 +148,6 @@ const handleSave = async () => {
             //编辑
             //如果一个都没改，不需要调用接口直接说保存成功
             if (hasChange()) {
-                console.log('有修改', article)
                 article.articleCode = props.articleCode
                 await updateArticle(article, cover)
                 articleStore.isDetailRefresh = true

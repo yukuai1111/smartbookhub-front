@@ -387,18 +387,15 @@ const send = async () => {
                     tempAiItem.status = 2
                 }
                 if (activeId.value) {
-                    console.log('刷新标题')
                     Promise.all([
                         getConversation(),
                         (async () => {
                             const res = await getConversationDetail(activeId.value)
                             if (res.data) {
                                 conversationTitle.value = res.data.title
-                                console.log('刷新成功', res.data.title)
                             }
                         })()
                     ]).catch(err => {
-                        console.error('刷新失败', err)
                     })
                 } else {
                     getConversation()
@@ -459,7 +456,6 @@ const handleDeleteMessage = (message_id: number) => {
         type: 'warning',
     }).then(async () => {
         try {
-            console.log('删除消息', message_id)
             //删除消息
             await deleteMessage(message_id)
             ElMessage.success('删除成功')
@@ -487,7 +483,6 @@ onMounted(() => {
     getConversation()
 })
 onBeforeUnmount(() => {
-    console.log('组件卸载时清除控制器')
     if (aiStore.currentControllerKey) {
         //组件卸载时清除控制器
         aiStore.removeOneController(aiStore.currentControllerKey as string, true)

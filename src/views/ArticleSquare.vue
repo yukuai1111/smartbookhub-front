@@ -88,7 +88,6 @@ const pageData = reactive({
 const getCommend = async () => {
     const res = await getRecommendList()
     if (res.data) {
-        console.log(res.data)
         recommendList.value = res.data.recommendList
     }
 }
@@ -96,7 +95,6 @@ const getCommend = async () => {
 const getList = async () => {
     const res = await getProfileList(pageData)
     if (res.data) {
-        console.log(res.data)
         total.value = res.data.totalSize
         articleList.value = res.data.articleList
     }

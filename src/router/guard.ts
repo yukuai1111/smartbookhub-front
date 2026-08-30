@@ -6,7 +6,7 @@ import type { Router } from 'vue-router'
 const publicList=['/logReg','/','/articleSquare','/articleDetail','/about']  //不需要登陆的公开路由
 const backList=['/articleDetail','/comment','/otherUserHome']  //后台放行的路由
 export const routerGuard = (router: Router) => {
-    router.beforeEach((to, from, next) => {
+    router.beforeEach((to, _from, next) => {
         const userStore = useUserStore()
         const token=userStore.token
         if (!token) {

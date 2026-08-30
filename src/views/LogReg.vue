@@ -154,7 +154,6 @@ const loginUser = async (isRegister: boolean = false) => {
             ElMessage.error(err.message || '登录失败')
         }
         if (typeof err === 'string') {
-            console.log(err)
             ElMessage.error(err)
         }
         formData.password = ''

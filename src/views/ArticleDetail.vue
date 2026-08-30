@@ -205,7 +205,6 @@ const getReaderList = async () => {
 }
 const getDetail = async () => {
     const res = await getArticleDetail(articleCode.value)
-    console.log(res)
     return res
 }
 //并行

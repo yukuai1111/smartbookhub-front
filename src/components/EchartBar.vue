@@ -128,7 +128,6 @@ const renderChart = () => {
     });
 }
 watch(() => [props.xdata, props.ydata1, props.ydata2], (newVal) => {
-    console.log(newVal)
     renderChart()
 }, { deep: true })
 onMounted(() => {

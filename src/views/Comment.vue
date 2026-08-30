@@ -126,7 +126,7 @@
             <div class="comment-send" v-if="!errMsg">
                 <div class="avatar">
                     <el-image style="width:60px;height: 60px;" fit="cover"
-                        :src="avatarBaseurl + userStore.userinfo!.avatar"></el-image>
+                        :src="avatarBaseurl + userStore.userinfo?.avatar"></el-image>
                 </div>
                 <div class="send-container">
                     <div class="name">
@@ -227,7 +227,6 @@ const getComment = async () => {
                 item.isExpandReply = false
                 return item
             })]
-            console.log(commentList.value)
             //如果获取的新数据的条数已经小于pageSize，说明没有更多评论了
             if (res.data.commentList.length < commentData.pageSize) {
                 noMore.value = true
