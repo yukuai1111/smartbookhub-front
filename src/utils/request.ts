@@ -125,8 +125,8 @@ export const streamPost = async (
                     query: {
                         type: 'login'
                     }
-                }).catch((err) => {
-                    console.log('跳转登录页失败', err)
+                }).catch(() => {
+
                 })
                 ElMessage.error(data.message)
                 setTimeout(() => {
@@ -170,6 +170,10 @@ export const streamPost = async (
                                 message_id: raw.user_msg.message_id,
                                 ai_msgId: raw.ai_msgId
                             })
+                        } else if (typeof data.content === 'object' && data.content.type === 'error') {
+                            //模型错误
+                            ElMessage.error('AI请求失误')
+                            onError(data.content.errMsg || 'AI请求失误')
                         }
                         else if (typeof data.content === 'string') {
                             //就是ai回复的消息
@@ -185,6 +189,7 @@ export const streamPost = async (
                     }
                     //请求失败
                     if (data.type === 'error') {
+                        ElMessage.error('AI请求失误')
                         onError(data.msg || 'AI请求失误')
                     }
                 } catch (err: unknown) {
