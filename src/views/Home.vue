@@ -17,6 +17,7 @@
                         <div class="home-btn">
                             <el-button plain size="large" @click="router.push({name:'articleSquare'})">漫步知识广场</el-button>
                             <el-button plain size="large" @click="router.push({name:'aiConversation'})">与AI共读思考</el-button>
+                            <el-button plain size="large" @click="router.push({name:'about'})">关于我们</el-button>
                         </div>
                     </div>
                 </div>
@@ -137,6 +138,11 @@ const router = useRouter()
 
                 :deep(.el-button:nth-child(2)) {
                     background-color: rgba(255, 255, 255, 0.24);
+                    color: #ffffff;
+                    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
+                }
+                :deep(.el-button:nth-child(3)) {
+                    background-color: rgba(20, 80, 120, 0.65);
                     color: #ffffff;
                     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
                 }
